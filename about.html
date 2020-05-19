@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>Compuclinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-items">
+            <a href="./">
+                <div class="navbar-brand">Compuclinic</div>
+            </a>
+            <div class="pages">
+                <div class="menubutton">
+                    <i class="fas fa-bars" style="color: white;"></i>
+                </div>
+                <ul id="pages">
+                    <a href="./" class="abc">
+                        <li>Home</li>
+                    </a>
+
+                    <a href="services" class="abc">
+                        <li>Services</li>
+                    </a>
+
+                    <a href="about" class="abc about">
+                        <li>About</li>
+                    </a>
+                    <a href="testimonials" class="abc">
+                        <li>Testimonials</li>
+                    </a>
+                    <a href="contact" class="abc">
+                        <li>Contact</li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="banner magic" id="about">
+            <h1>About Us</h1>
+        </div>
+        <div class="text" style="justify-content: flex-start;">Compuclinic offers businesses the peace of mind that's crucial in today's world. At Compuclinic we place an emphasis on security, which, given the daily rise in computer hacking, ransomware and the like, we monitor machines and offer a monthly maintenance service, that assures company's of speed, security, file safety and reliability that's fundamental. We stay on top of new technology and threats, constantly upgrading out of date hardware and software.
+            <p></p>
+            Compuclinic launched two years ago to afford small to large businesses the security that is essential in today's world. Business documents and data is fundamental to any business and these need to be secured and backed up regularly to ensure safety. Along with constant access to our team, you can go to sleep with a relaxed mind knowing that whatever can be done to protect your essentials is being done.
+            <p></p>
+            We utilise the most up to date software coupled with never ending learning, ensures that here at compuclinic we know that we are offering our valued clientele whatever security and maintenance there is available.
+            <p></p>
+            We have established clientele whom wholly rely on us for everything computer related, whether it's laptops, printers, personal devices or the like we make sure to be there usually within the hour of a call to ensure that you can get on with your business without delay. If need be we also offer temporary devices whilst your ones are being repaired.</div>
+        <div class="footer">If you have any questions or queries feel free to contact us using the contact form.</div>
+
+    </div>
+
+    <script>
+        $(".menubutton").click(function() {
+            $('#pages').toggle();
+            $('.submenu-content').hide();
+        });
+
+        $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: "php/getpage.php",
+                data: {
+                    "pagename": 'About'
+                },
+                success: function(response) {
+                    console.log(response);
+                    document.querySelector('.text').innerHTML = response;
+                }
+            });
+        });
+        $.ajax({
+            type: "GET",
+            url: "php/head.php",
+            success: function(response) {
+                document.querySelector('head').innerHTML = response;
+            }
+        })
+
+    </script>
+</body>
+
+</html>

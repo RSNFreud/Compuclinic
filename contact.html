@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>Compuclinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-items">
+            <a href="./">
+                <div class="navbar-brand">Compuclinic</div>
+            </a>
+            <div class="pages">
+                <div class="menubutton">
+                    <i class="fas fa-bars" style="color: white;"></i>
+                </div>
+                <ul id="pages">
+                    <a href="./" class="abc">
+                        <li>Home</li>
+                    </a>
+
+                    <a href="services" class="abc">
+                        <li>Services</li>
+                    </a>
+
+                    <a href="about" class="abc">
+                        <li>About</li>
+                    </a>
+                    <a href="testimonials" class="abc">
+                        <li>Testimonials</li>
+                    </a>
+                    <a href="contact" class="abc active">
+                        <li>Contact</li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <div class="banner magic" id="contact">
+            <h1>Contact Us</h1>
+        </div>
+        <div class="text" id="contacttext">
+            <form class="contact">
+                <div class="labels">
+                    <div style="width: 120px; padding: 3px 0px;">Full Name:</div>
+                    <input type="text" id="name" placeholder="Full Name" class="fields2">
+                </div>
+                <div class="labels">
+                    <div style="width: 120px; padding: 3px 0px;">Email:</div>
+                    <input type="email" id="email" placeholder="Email" class="fields2">
+                </div>
+                <div class="labels">
+                    <div style="width: 120px; padding: 3px 0px;">Subject:</div>
+                    <input type="text" id="subject" placeholder="Subject" class="fields2">
+                </div>
+                <div class="labels">
+                    <div style="width: 100%; margin-bottom: 10px; padding: 3px;">Message:</div>
+                    <textarea rows="10" id="message" placeholder="Message" class="fields2"></textarea>
+                </div>
+                <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
+                <div style="display: flex; flex-direction: row; align-content: flex-start; align-items: center; width: 100%; justify-content: flex-start; padding: 0px 10px; box-sizing: border-box;">
+                    <div class="button" id="testibutton">Send Message</div>
+                    <span id="messages" style="margin: 0; margin-left: 10px;"></span>
+                </div>
+            </form>
+            <div class="map">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le4RKUUAAAAAIIhzrKxtGcaJ0VqGf53_CIFnmd_"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Le4RKUUAAAAAIIhzrKxtGcaJ0VqGf53_CIFnmd_', {
+                action: 'contact'
+            }).then(function(token) {
+                var recaptchaResponse = document.getElementById('recaptchaResponse');
+                recaptchaResponse.value = token;
+            });
+        });
+
+    </script>
+
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    <script>
+        // Map
+        var mymap = L.map('map', {
+            zoomControl: false,
+            dragging: false
+        }).setView([51.579080, -0.220490], 40)
+        var marker = L.marker([51.579080, -0.220490]).addTo(mymap);
+        marker.bindPopup("<b>Compuclinic</b><br>Renters Avenue,<br>Hendon,<br>NW4 3RD").openPopup();
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery Â© <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            minZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoicnNuZnJldWQiLCJhIjoiY2p1NDRmY3llMHU3dDQzbW1icGV4ZHR6NCJ9.fimYcfM0QeypDo54pzU-ig'
+        }).addTo(mymap);
+
+        $(".menubutton").click(function() {
+            $('#pages').toggle();
+        });
+        $('#testibutton').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "php/submitform.php",
+                data: {
+                    "recaptcha-response": document.querySelector('#recaptchaResponse').value,
+                    "name": document.querySelector('#name').value,
+                    "email": document.querySelector('#email').value,
+                    "subject": document.querySelector('#subject').value,
+                    "message": document.querySelector('#message').value
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response == 'Message succesfully sent!') {
+                        $.ajax({
+                            type: "POST",
+                            url: "php/messagealert.php",
+                            data: {
+                                "name": document.querySelector('#name').value,
+                                "email": document.querySelector('#email').value,
+                                "subject": document.querySelector('#subject').value,
+                                "message": document.querySelector('#message').value
+                            },
+                            success: function(response) {
+                                console.log(response);
+                            }
+                        })
+                        document.querySelector('.contact').reset();
+                        document.querySelector('#messages').innerHTML = response;
+                    }
+                }
+            })
+        });
+        $.ajax({
+            type: "GET",
+            url: "php/head.php",
+            success: function(response) {
+                document.querySelector('head').innerHTML = response + '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />';
+            }
+        })
+
+    </script>
+</body>
+
+</html>

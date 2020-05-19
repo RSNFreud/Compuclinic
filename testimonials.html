@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>Compuclinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-items">
+            <a href="./">
+                <div class="navbar-brand">Compuclinic</div>
+            </a>
+            <div class="pages">
+                <div class="menubutton">
+                    <i class="fas fa-bars" style="color: white;"></i>
+                </div>
+                <ul id="pages">
+                    <a href="./" class="abc">
+                        <li>Home</li>
+                    </a>
+
+                    <a href="services" class="abc">
+                        <li>Services</li>
+                    </a>
+
+                    <a href="about" class="abc">
+                        <li>About</li>
+                    </a>
+                    <a href="testimonials" class="abc active">
+                        <li>Testimonials</li>
+                    </a>
+                    <a href="contact" class="abc">
+                        <li>Contact</li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="banner magic" id="testimonials">
+            <h1>Testimonials</h1>
+        </div>
+        <div class="data" style="justify-content: space-between;">
+            <div id="opentesti" style="display: flex; flex-direction: row; align-content: flex-end; width: 100%; justify-content: flex-end;">
+                <div class="button" style="width: auto; margin: 0;" id="newtesti">Submit Testimonial</div>
+            </div>
+            <form class="testimonials">
+                <div class="labels">
+                    <div style="width: 90px;">Full Name:</div>
+                    <input type="text" id="name" placeholder="Full Name" class="fields">
+                </div>
+                <div class="labels">
+                    <div style="width: 90px;">Message:</div>
+                    <input type="text" id="message" placeholder="Message" class="fields">
+                </div>
+                <div class="labels">
+                    <div style="width: 90px;">Rating:</div>
+                    <i class="far fa-star" id="1"></i><i class="far fa-star" id="2"></i><i class="far fa-star" id="3"></i><i class="far fa-star" id="4"></i><i class="far fa-star" id="5"></i>
+                </div>
+                <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
+                <div style="display: flex; flex-direction: row; align-content: flex-end; width: 100%; justify-content: flex-start; padding: 0px 10px; box-sizing: border-box;">
+                    <div class="button" id="testibutton">Submit Testimonial</div>
+                    <span id="messages"></span>
+                </div>
+            </form>
+            <div id="inserthere">
+            </div>
+        </div>
+
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le4RKUUAAAAAIIhzrKxtGcaJ0VqGf53_CIFnmd_"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Le4RKUUAAAAAIIhzrKxtGcaJ0VqGf53_CIFnmd_', {
+                action: 'contact'
+            }).then(function(token) {
+                var recaptchaResponse = document.getElementById('recaptchaResponse');
+                recaptchaResponse.value = token;
+            });
+        });
+
+    </script>
+    <script>
+        $(".menubutton").click(function() {
+            $('#pages').toggle();
+            $('.submenu-content').hide();
+        })
+        window.rating = '0';
+
+        $("#1").click(function() {
+            $('#1').addClass('fill');
+            $('#2').removeClass('fill');
+            $('#3').removeClass('fill');
+            $('#4').removeClass('fill');
+            $('#5').removeClass('fill');
+            window.rating = '1';
+        })
+        $("#2").click(function() {
+            $('#1').addClass('fill');
+            $('#2').addClass('fill');
+            $('#3').removeClass('fill');
+            $('#4').removeClass('fill');
+            $('#5').removeClass('fill');
+            window.rating = '2';
+        })
+        $("#3").click(function() {
+            $('#1').addClass('fill');
+            $('#2').addClass('fill');
+            $('#3').addClass('fill');
+            $('#4').removeClass('fill');
+            $('#5').removeClass('fill');
+            window.rating = '3';
+        })
+        $("#4").click(function() {
+            $('#1').addClass('fill');
+            $('#2').addClass('fill');
+            $('#3').addClass('fill');
+            $('#4').addClass('fill');
+            $('#5').removeClass('fill');
+            window.rating = '4';
+        })
+        $("#5").click(function() {
+            $('#1').addClass('fill');
+            $('#2').addClass('fill');
+            $('#3').addClass('fill');
+            $('#4').addClass('fill');
+            $('#5').addClass('fill');
+            window.rating = '5';
+        })
+        $("#newtesti").click(function() {
+            $('.testimonials').slideToggle();
+        })
+        $("#testibutton").click(function() {
+            console.log(window.rating);
+            $.ajax({
+                type: "POST",
+                url: "php/submittesti.php",
+                data: {
+                    "name": document.querySelector('#name').value,
+                    "message": document.querySelector('#message').value,
+                    "rating": window.rating,
+                    "recaptcha_response": document.querySelector('#recaptchaResponse').value
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response == "Testimonial succesfully submitted!") {
+                        $('#1').removeClass('fill');
+                        $('#2').removeClass('fill');
+                        $('#3').removeClass('fill');
+                        $('#4').removeClass('fill');
+                        $('#5').removeClass('fill');
+                        document.querySelector('.testimonials').reset();
+                        document.querySelector('#messages').innerHTML = response;
+                        $.ajax({
+                            type: "POST",
+                            url: "php/alert.php",
+                            data: {
+                                "name": document.querySelector('#name').value
+                            },
+                            success: function(response) {
+                                console.log(response);
+                            }
+                        })
+                    }
+                }
+            })
+        })
+
+        function testimonials() {
+            $.ajax({
+                type: "GET",
+                url: "php/gettesti.php",
+                data: {},
+                success: function(response) {
+                    if (response != "") {
+                        document.querySelector('#inserthere').innerHTML = response
+
+                    }
+                }
+            })
+        }
+        $(document).ready(function() {
+            testimonials();
+        })
+        $.ajax({
+            type: "GET",
+            url: "php/head.php",
+            success: function(response) {
+                document.querySelector('head').innerHTML = response;
+            }
+        })
+
+    </script>
+</body>
+
+</html>

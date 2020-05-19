@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>Compuclinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-items">
+            <a href="./">
+                <div class="navbar-brand">Compuclinic</div>
+            </a>
+            <div class="pages">
+                <div class="menubutton">
+                    <i class="fas fa-bars" style="color: white;"></i>
+                </div>
+                <ul id="pages">
+                    <a href="./" class="abc active">
+                        <li>Home</li>
+                    </a>
+
+                    <a href="services" class="abc">
+                        <li>Services</li>
+                    </a>
+
+                    <a href="about" class="abc">
+                        <li>About</li>
+                    </a>
+                    <a href="testimonials" class="abc">
+                        <li>Testimonials</li>
+                    </a>
+                    <a href="contact" class="abc">
+                        <li>Contact</li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <div class="banner magic">
+            <div style="width: 90%; margin: auto;">
+                <h1 style="margin: 10px; text-align: center;">Are you having computer issues?</h1>
+                <h3 style="margin: 10px; text-align: center;">Book us now for fast, reliable and professional service! Don't believe us? Check out the testimonials!</h3> </div>
+
+            <div style="width: 100%">
+                <a href="contact">
+                    <div class="button">Book now!</div>
+                </a>
+            </div>
+        </div>
+        <div class="features">
+            <i class="fas fa-arrow-left arrows" style="color: white; left: 0;" onclick="plusSlides(-1)"></i>
+            <i class="fas fa-arrow-right arrows" style="color: white; right: 0;" onclick="plusSlides(1)"></i>
+            <div class="imagebox fade" id="image-1">
+                <a href="services#pc"><h1>Appliance sourcing</h1></a>
+            </div>
+            <div class="imagebox fade" id="image-2">
+                <a href="services#upgrades"><h1>IT Projects </h1></a>
+            </div>
+            <div class="imagebox fade" id="image-3">
+                <a href="services#helpdesk"><h1>Helpdesk</h1></a>
+            </div>
+            <div class="imagebox fade" id="image-4">
+                <a href="services#maintenance"><h1>Monthly maintenance plan </h1></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".menubutton").click(function() {
+            $('#pages').toggle();
+            $('.submenu-content').hide();
+        })
+
+        if (window.innerWidth < 600) {
+            var slideIndex = 1;
+            showSlides(slideIndex);
+
+            // Next/previous controls
+            function plusSlides(n) {
+                showSlides(slideIndex += n);
+            }
+
+            // Thumbnail image controls
+            function currentSlide(n) {
+                showSlides(slideIndex = n);
+            }
+
+            function showSlides(n) {
+                var i;
+                var slides = document.getElementsByClassName("imagebox");
+                if (n > slides.length) {
+                    slideIndex = 1
+                }
+                if (n < 1) {
+                    slideIndex = slides.length
+                }
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.right = "100vw";
+                }
+
+                slides[slideIndex - 1].style.right = "auto";
+            }
+
+            showSlides();
+        }
+        $.ajax({
+            type: "GET",
+            url: "php/head.php",
+            success: function(response) {
+                document.querySelector('head').innerHTML = response;
+            }
+        })
+
+    </script>
+</body>
+
+</html>
